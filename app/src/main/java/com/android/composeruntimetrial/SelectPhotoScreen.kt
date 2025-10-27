@@ -9,8 +9,14 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.Slider
@@ -26,6 +32,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
 import com.android.imageprocesser.Blur
 import com.android.imageprocesser.Brightness
 import com.android.imageprocesser.ImageProcessingContent
@@ -112,7 +119,11 @@ fun PhotoPickerToByteArraySample(modifier: Modifier = Modifier) {
         }
     )
 
-    Column(modifier = modifier) {
+    Column(
+        modifier = modifier
+            .padding(10.dp),
+        verticalArrangement = Arrangement.spacedBy(10.dp)
+    ) {
         Button(
             onClick = {
                 pickMediaLauncher.launch(
@@ -123,7 +134,7 @@ fun PhotoPickerToByteArraySample(modifier: Modifier = Modifier) {
             },
             enabled = !isLoading
         ) {
-            Text("画像を選択 (Photo Picker)")
+            Text("画像を選択")
         }
 
         when {
@@ -132,14 +143,47 @@ fun PhotoPickerToByteArraySample(modifier: Modifier = Modifier) {
                 Text("✅ 画像データ取得完了")
 
                 selectedBitmap?.let { bitmap ->
-                    Text("元の画像:")
-                    Image(
-                        bitmap = bitmap.asImageBitmap(),
-                        contentDescription = "Original Image"
-                    )
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .wrapContentSize(),
+                        horizontalArrangement = Arrangement.spacedBy(5.dp)
+                    ) {
+                        Column(
+                            modifier = Modifier
+                                .weight(1f)
+                        ) {
+                            Text("元の画像:")
+                            Image(
+                                bitmap = bitmap.asImageBitmap(),
+                                contentDescription = "Original Image"
+                            )
+                        }
+                        Column(
+                            modifier = Modifier
+                                .weight(1f)
+                        ) {
+                            processedImage?.let { bytes ->
+                                selectedBitmap?.let { originalBitmap ->
+                                    Text("処理済み画像:")
+                                    Image(
+                                        bitmap = argbByteArrayToBitmap(
+                                            bytes,
+                                            originalBitmap.width,
+                                            originalBitmap.height
+                                        ).asImageBitmap(),
+                                        contentDescription = "Processed Image"
+                                    )
+                                }
+                            }
+                        }
+                    }
                 }
 
-                Row {
+                Row(
+                    modifier = Modifier
+                        .padding(horizontal = 10.dp)
+                ) {
                     Text("ミラー: ")
                     ToggleButton(
                         checked = isMirrored,
@@ -166,23 +210,6 @@ fun PhotoPickerToByteArraySample(modifier: Modifier = Modifier) {
                         onValueChange = { brightness = it.toInt() },
                         valueRange = -100f..100f
                     )
-                }
-
-                processedImage?.let { bytes ->
-                    selectedBitmap?.let { originalBitmap ->
-                        println("======== Displaying Processed Image isChanged: ${processedImage.contentEquals(
-                            selectedImageBytes
-                        )} ========")
-                        Text("処理済み画像:")
-                        Image(
-                            bitmap = argbByteArrayToBitmap(
-                                bytes,
-                                originalBitmap.width,
-                                originalBitmap.height
-                            ).asImageBitmap(),
-                            contentDescription = "Processed Image"
-                        )
-                    }
                 }
             }
             else -> Text("未選択")
