@@ -6,7 +6,7 @@ import androidx.compose.runtime.Composable
 public fun Mirror() {
     val context = LocalImageContext.current ?: error("ImageContext not provided")
 
-    Block(
+    ImageProcesserBlock(
         content = {},
         imageProcessor = MirrorProcessor(
             width = { context.width },

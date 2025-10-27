@@ -17,7 +17,7 @@ public fun Brightness(
     val brightnessValue = brightness()
     val context = LocalImageContext.current ?: error("ImageContext not provided")
 
-    Block(
+    ImageProcesserBlock(
         content = {},
         imageProcessor = BrightnessProcessor(
             brightness = { brightnessValue },

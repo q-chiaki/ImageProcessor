@@ -12,7 +12,7 @@ public fun Blur(
     val context = LocalImageContext.current ?: error("ImageContext not provided")
     val radiusValue = radius()
 
-    Block(
+    ImageProcesserBlock(
         content = {},
         imageProcessor = BlurProcessor(
             width = { context.width },

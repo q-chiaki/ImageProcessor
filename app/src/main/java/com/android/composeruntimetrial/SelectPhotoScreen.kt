@@ -28,7 +28,6 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import com.android.imageprocesser.Blur
 import com.android.imageprocesser.Brightness
-import com.android.imageprocesser.Chain
 import com.android.imageprocesser.ImageProcessingContent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -79,21 +78,19 @@ fun PhotoPickerToByteArraySample(modifier: Modifier = Modifier) {
         width = selectedBitmap?.width ?: 0,
         height = selectedBitmap?.height ?: 0,
     ) {
-        Chain {
-            if (isMirrored) {
-                println("======== Applying Mirror ========")
-                Mirror()
-            }
-            if (isBlurred) {
-                println("======== Applying Blur ========")
-                Blur(
-                    radius = { 12 }
-                )
-            }
-            Brightness(
-                brightness = { brightness },
+        if (isMirrored) {
+            println("======== Applying Mirror ========")
+            Mirror()
+        }
+        if (isBlurred) {
+            println("======== Applying Blur ========")
+            Blur(
+                radius = { 12 }
             )
         }
+        Brightness(
+            brightness = { brightness },
+        )
     }
 
     val pickMediaLauncher = rememberLauncherForActivityResult(

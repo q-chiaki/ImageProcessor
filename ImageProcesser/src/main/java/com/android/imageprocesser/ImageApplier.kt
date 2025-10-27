@@ -2,12 +2,12 @@ package com.android.imageprocesser
 
 import androidx.compose.runtime.AbstractApplier
 
-internal class ImageApplier(root: MyNode) : AbstractApplier<MyNode>(root) {
-    override fun insertBottomUp(index: Int, instance: MyNode) {
+internal class ImageApplier(root: ProcessorNode) : AbstractApplier<ProcessorNode>(root) {
+    override fun insertBottomUp(index: Int, instance: ProcessorNode) {
         current.children.add(index, instance)
     }
 
-    override fun insertTopDown(index: Int, instance: MyNode) {}
+    override fun insertTopDown(index: Int, instance: ProcessorNode) {}
 
     override fun move(from: Int, to: Int, count: Int) {
         current.children.move(from, to, count)

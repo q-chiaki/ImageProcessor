@@ -49,7 +49,7 @@ public fun ImageProcessingContent(
 private class ImageProcessing {
     val clock = BroadcastFrameClock()
     val coroutineScope = CoroutineScope(clock + Dispatchers.Main)
-    val rootNode = MyNode()
+    val rootNode = ProcessorNode()
     private val applier = ImageApplier(rootNode)
     private val recomposer = Recomposer(clock)
     private val composition = Composition(applier, recomposer)
